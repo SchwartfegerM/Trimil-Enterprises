@@ -1,0 +1,10 @@
+{%extends "layout.html"%} <!--this pulls the html content from the layout.html file and uses it in this file-->
+    {%block body%}  <!--this opens the body tag from the layout.html file as if it were created here-->
+
+        <h1>{{content.title}}</h1>
+        <p>{{content.date}}</p>
+        <p>{{content.body}}</p>
+
+    
+    {%endblock%} <!--closes the body tag imported from layout.html-->
+  
