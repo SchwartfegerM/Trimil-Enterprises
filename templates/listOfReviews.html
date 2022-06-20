@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h3>Reviews</h3>
+<a href="/reviews/create">Leave us your feedback</a>
+<ul>
+  {% for review in reviews %}
+    <li>
+      <p class="review-content">{{review.content}}</p>
+      <p class="review-name">{{review.FirstName}} {{review.LastName}}</p>
+      <p class="review-company">{{review.organisation}}</p>
+    </li>
+  {% endfor %}
+</ul>
+  
+{% endblock %}

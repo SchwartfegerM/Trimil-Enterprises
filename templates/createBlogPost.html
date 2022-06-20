@@ -1,0 +1,12 @@
+{% extends "adminLayout.html" %}
+
+{% block body %}
+<form method=post enctype="multipart/form-data" action="/TODO">
+  <input autofocus autocomplete="off" name="post_name" type="text" required="required" placeholder="Post Name">
+  <input autocomplete="off" name="post_thumbnail" type="file" required="required">
+  <input autocomplete="off"	name="post_date" type="date" required="required">
+  <input autocomplete="off" name="post_summary" type="text" placeholder="post Summary">
+  <input autocomplete="off" name="post_content" type=text required="required" placeholder='Post content'>
+  <input type="submit">
+</form>
+{% endblock %}
