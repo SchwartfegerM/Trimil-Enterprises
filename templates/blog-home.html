@@ -6,7 +6,6 @@
 <!--for each post in posts create a list item with a form button to the post-->
   {% for post in posts %}
   <li class="blog-post">
-    <img src="{{url_for('static',filename='images/grass-stock-image.jpg')}}">
     <p class="blog-post-title">{{post.title}}</p>
     <p class="blog-post-date">{{post.date}}</p>
     <P class="blog-post-summary">{{post.summary}}</P>

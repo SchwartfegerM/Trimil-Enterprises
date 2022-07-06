@@ -28,9 +28,9 @@ if __name__ == "__main__":
   conn=sql.connect("TrimilEnterprises.db")
   cursor= conn.cursor()
   username="ADMIN"
-  stuff = cursor.execute("SELECT * FROM Login").fetchall()
+  stuff = cursor.execute("SELECT * FROM Login WHERE Username = ?", (username,)).fetchall()
   if stuff[0][2] == "ADMIN1":
     print("good")
   conn.commit()
   conn.close()
-  print(stuff)
+  

@@ -4,11 +4,34 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Trimil Enterprises</title>
 </head>
 <body>
-  <p>placeholder text for troubleshooting and to remind myself to fix the adminLayout.html file</p>
-    {% block body %}
-    {% endblock %}
+  <div id="mySidenav" class="sidenav">   
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <a href="/blog">Blog</a>
+      <a href="/reviews">Invoices</a>
+      <a href="/logout">Logout</a>
+    </div>
+          
+    <div id="mainContent">
+      <div id="header" >
+        
+        <div id="menu-container" onclick="openNav()">      
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+        </div>
+        <a href="/" id="business-name">Trimil Enterprises</a>
+      </div>
+    </div>
+    <div id="body">
+      {% block body %}
+      {% endblock %}
+  
+    </div>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+  <script defer src="{{url_for('static',filename='script/app.js')}}">
+  </script>
 </body>
 </html>

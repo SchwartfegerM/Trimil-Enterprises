@@ -1,21 +1,18 @@
 #to run this app use the terminal command "flask run"
 #set enviroment variables:
 #set FLASK_APP app.py
-from flask import Flask, render_template, session, redirect, request
+from os import urandom
+from flask import Flask, render_template, session, redirect, request, url_for
 from flask_session import Session
-import sqlite3 as sql
-
+from database_funtions import get_database_connection
 
 app = Flask(__name__) #initialise the flask application
 #config to set up sessions for a secure login system
 app.config["SESSION_TYPE"] = 'filesystem'
 app.config["SESSION_PERMANENT"] = False
+app.secret_key = urandom(24)
 Session(app)
 
-def get_database_connection():
-  conn = sql.connect('TrimilEnterprises.db')
-  conn.row_factory = sql.Row
-  return conn
 
 @app.route("/")
 #route for the home page
@@ -41,14 +38,21 @@ def posts(id):
 @app.route("/blog/list", methods=["GET","POST"])
 #this is the list of posts visable to ADMIN accounts
 def blog_posts_list():
-
-  return render_template("admin-list-of-posts.html")
+  if "username" in session:
+    conn = get_database_connection()
+    posts = conn.execute("SELECT * FROM BlogPosts").fetchall()
+    conn.close()
+    return render_template("admin-list-of-posts.html",posts = posts)
+  else:
+    return redirect(url_for("index"))
 
 @app.route('/blog/create')
 def create_blog_post():
   #tutorial on BLOB data https://pynative.com/python-sqlite-blob-insert-and-retrieve-digital-data/
-  #some season checking code HERE
-  return render_template("createBlogPost.html")
+  if "username" in session:
+    return render_template("createBlogPost.html")
+  else: 
+    return redirect(url_for("index"))
 
 @app.route("/login",methods=["GET","POST"])
 def login():
@@ -56,17 +60,27 @@ def login():
 
 @app.route("/login/verify",methods=["GET","POST"])
 def verify():
-  username = request.form.get("username",None)
-  password = request.form.get("password",None)
-  conn=get_database_connection()
-  account = conn.execute("SELECT * FROM Login WHERE Username = ?", username).fetchall()
-  if account["Password"] == password:
-    return redirect("/blog/list") 
+  if request.method == "POST":
+    username = request.form.get("username",None)
+    password = request.form.get("password",None)
+    conn=get_database_connection()
+    account = conn.execute("SELECT * FROM Login WHERE Username = ?", (username,)).fetchall()
+    if account[0][2] == password:
+      session["username"] = username
+      return redirect("/blog/list") 
+    else:
+      return redirect("/login")
+    conn.close()
   else:
-    return redirect("/login")
-  conn.close()
+    redirect(url_for("index"))
+
+@app.route("/logout",methods=["GET","POST"])
+def logout():
+  session.pop("username", None)
+  return redirect("/")
 
 @app.route("/reviews")
+#servs the list of all reviews in the database
 def review():
   conn=get_database_connection()
   reviews=conn.execute("SELECT * FROM Reviews").fetchall()
@@ -74,35 +88,52 @@ def review():
   return render_template("listOfReviews.html", reviews=reviews)
 
 @app.route("/reviews/create")
+#serves the create a review html template
 def create_review():
-    
     return render_template("createReview.html")
 
 @app.route("/reviews/submitted",methods=["POST"])
-#thank the user for the review
-def thanks_for_the_review():
+#stores the contents in the review form and serves the page to thanks the user for the review.
+def review_submitted():
+  #get items from the review form
   first_name = request.form.get("first_name",None)
   last_name = request.form.get("last_name",None)
   content = request.form.get("content",None)
   organisation = request.form.get("organisation",None)
-  return render_template("submittedReview.html",first_name=first_name,last_name=last_name,content=content,organisation=organisation)
+  email = request.form.get("email",None)
+  conn=get_database_connection() #connect to the database
+  conn.execute("INSERT INTO Reviews(FirstName,LastName,Content,organisation,email) VALUES (?,?,?,?,?)",(first_name,last_name,content,organisation,email)) #insert values into the database
+  conn.commit() #commit changes to the database
+  conn.close() #close connection to the databse
+  return render_template("submittedReview.html") #render the review submitted template
 
-
-
-@app.route('/TODO',methods=["POST"])
+@app.route('/blogpost/submit',methods=["POST"])
 #remove this when blog post handling is done
-def temp():
+def blog_post_submit():
   post_name=request.form.get("post_name",None)
-  post_thumbnail=request.form.get("post_thumbnail",None) #currently not working FIX TODO
   post_date=request.form.get("post_date",None)
   post_summary=request.form.get("post_summary",None)
   post_content=request.form.get("post_content",None)
-  return render_template("temp.html",name=post_name,thumbnail=post_thumbnail,date=post_date,summary=post_summary,content=post_content)
+  conn = get_database_connection()
+  conn.execute("INSERT INTO BlogPosts(Title,Date,Summary,Content) VALUES (?,?,?,?)",(post_name,post_date,post_summary,post_content))
+  conn.commit()
+  conn.close()
+  return redirect(url_for("blog_posts_list"))
 
 @app.route("/blog/<int:id>/edit")
 def blog_post_edit(id):
+  conn = get_database_connection()
+  post_data = conn.execute("SELECT * FROM BlogPosts WHERE id=?",(id,)).fetchall()
+  conn.close()
+  return render_template("createBlogPost.html",post=post_data)
 
-  return render_template("")
+@app.route("/blog/<int:id>/delete")
+def blog_post_delete(id):
+  conn = get_database_connection()
+  conn.execute("DELETE FROM BlogPosts WHERE id=?",(id,))
+  conn.commit()
+  conn.close()
+  return redirect("/blog/list")
 
 @app.route("/invoicing")
 def invoiceing():

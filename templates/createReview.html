@@ -3,11 +3,14 @@
 {% block body %}
 
 <form action="/reviews/submitted" method="post">
-  <input autocomplete="off" autofocus name="content" placeholder="please leave your review here" type="text" required="required">
-  <input autocomplete="off" name="first_name" placeholder="First Name" type="text" required="required">
-  <input autocomplete="off" name="last_name" placeholder="Last Name" type="text" required="required">
-  <input autocomplete="off" name="organisation" placeholder="if you represent an organisation please leave it here">
-  <input type="submit">
+  <ul>
+    <li><p>please leave your review here</p><input autocomplete="off" autofocus name="content" placeholder="review" type="text" required="required"></li>
+    <li><p>First Name</p><input autocomplete="off" name="first_name" placeholder="First Name" type="text" required="required"></li>
+    <li><p>Last Name</p><input autocomplete="off" name="last_name" placeholder="Last Name" type="text" required="required"></li>
+    <li><p>If you would like to leave your email so we can contact you</p><input autocomplete="off" name="email" placeholder="Email" type="text"></li>
+    <li><p>if you represent an organisation please leave it here</p><input autocomplete="off" name="organisation" placeholder="organisation" type="text"></li>
+    <li><input type="submit">
+  </ul>
 </form>
 
 {%endblock%}

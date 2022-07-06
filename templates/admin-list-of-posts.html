@@ -1,15 +1,15 @@
 {% extends "adminLayout.html" %}
 
 {% block body %}
-
+<a href="/blog/create">create a post</a>
 <ul>
   {% for post in posts %}
     <li>
-      <form>
-        
-      </form>
+      <P>{{post.title}}</P>
+      <a href="/blog/{{post.id}}/edit"><img src="{{url_for('static',filename='images/pencil-icon.png')}}" alt=" pencil silhouette" width="50" height="50"></a>
+      <a href="/blog/{{post.id}}/delete"><img src="{{url_for('static',filename='images/trash-can.png')}}" alt="trash can silhouette" width="50" height="50"></a>
     </li>
   {% endfor %}
 </ul>
-
+<script defer src="{{url_for('static',filename='script/editBlog.js')}}"></script>
 {% endblock %}
