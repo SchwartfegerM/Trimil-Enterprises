@@ -1,0 +1,18 @@
+{% extends "adminLayout.html" %}
+
+{% block body %}
+
+<form action="/invoices/create" method="post">
+  <input type="text" required autocomplete="off" name="first_name" placeholder="First Name">
+  <input type="text" required autocomplete="off" name="last_name" placeholder="Last Name">
+  <input type="text" required autocomplete="off" name="office_charges" placeholder="Office Charges">
+  <input type="text" required autocomplete="off" name="project_management" placeholder="Project Management">
+  <input type="text" required autocomplete="off" name="travel_charges" placeholder="Travel Charges">
+  <input type="text" required autocomplete="off" name="consultancy_charges" placeholder="Consultancy Charges">
+  <input type="submit" value="Add">
+</form>
+
+<table id="invoices">
+</table>
+<script src="{{url_for('static',filename='script/invoicing.js')}}"></script>
+{% endblock %}
