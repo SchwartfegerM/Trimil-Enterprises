@@ -128,24 +128,8 @@ def blog_posts_list():
 #serves the page page to create a new blog post
 def create_blog_post():
   if "username" in session:
-    return render_template("createBlogPost.html")
+    return render_template("createBlogPost.html", post_url = "/blog/0/INSERT")
   else: 
-    return redirect(url_for("index"))
-
-@app.route('/blogpost/submit',methods=["POST"])
-#stores the contents of the blog post form from creating a new blog post
-def blog_post_submit():
-  if "username" in session:
-    post_name=request.form.get("post_name",None)
-    post_date=request.form.get("post_date",None)
-    post_summary=request.form.get("post_summary",None)
-    post_content=request.form.get("post_content",None)
-    conn = get_database_connection()
-    conn.execute("INSERT INTO BlogPosts(Title,Date,Summary,Content) VALUES (?,?,?,?)",(post_name,post_date,post_summary,post_content))
-    conn.commit()
-    conn.close()
-    return redirect(url_for("blog_posts_list"),code="307")
-  else:
     return redirect(url_for("index"))
 
 @app.route("/blog/<int:id>/edit")
@@ -155,19 +139,22 @@ def blog_post_edit(id):
     conn = get_database_connection()
     post_data = conn.execute("SELECT * FROM BlogPosts WHERE id=?",(id,)).fetchall()
     conn.close()
-    return render_template("createBlogPost.html", post=post_data, post_url="/blog/{}/edit/update".format(id))
+    return render_template("createBlogPost.html", post=post_data, post_url="/blog/{}/UPDATE".format(id))
   else:
     return redirect(url_for("index"))
 
-@app.route("/blog/<int:id>/edit/update",methods=["POST"])
-def update_post(id):
+@app.route("/blog/<int:id>/<string:action>",methods=["POST"])
+def update_post(id,action):
   if "username" in session:
     post_name=request.form.get("post_name",None)
     post_date=request.form.get("post_date",None)
     post_summary=request.form.get("post_summary",None)
     post_content=request.form.get("post_content",None)
     conn=get_database_connection()
-    conn.execute("UPDATE BlogPosts SET title=?,date=?,Summary=?,content=? WHERE id=?",(post_name,post_date,post_summary,post_content,id))
+    if action == "UPDATE":
+      conn.execute("UPDATE BlogPosts SET title=?,date=?,Summary=?,content=? WHERE id=?",(post_name,post_date,post_summary,post_content,id))
+    elif action == "INSERT":
+      conn.execute("INSERT INTO BlogPosts(Title,Date,Summary,Content) VALUES (?,?,?,?)",(post_name,post_date,post_summary,post_content))
     conn.commit()
     conn.close()
     return redirect(url_for("blog_posts_list"),code=307)
