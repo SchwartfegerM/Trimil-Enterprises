@@ -8,8 +8,8 @@
   
   {% for post in posts %}
   <div class="mySlides fade">
-    <img src="{{url_for('static',filename=images/grass-stock-image.jpg)}}" style="width:100%">
-    <div class="text">{{post.Name}}</div>
+    <img src="{{url_for('static',filename='images/grass-stock-image.jpg')}}" style="width:100%">
+    <div class="text">{{post.Title}}</div>
   </div>
   {% endfor %}
 
@@ -21,8 +21,8 @@
 
 <!-- The dots/circles -->
 <div style="text-align:center">
-  <span class="dot" onclick="currentSlide(1)"></span>
-  <span class="dot" onclick="currentSlide(2)"></span>
-  <span class="dot" onclick="currentSlide(3)"></span>
+  {% for post in posts %}
+  <span class="dot" onclick="currentSlide({{loop.index}})"></span>
+  {% endfor %}
 </div>
 {% endblock %}
