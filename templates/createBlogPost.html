@@ -1,18 +1,35 @@
 {% extends "adminLayout.html" %}
 
 {% block body %}
-<form method=post enctype="multipart/form-data" action="/blogpost/submit">
-  <input autofocus autocomplete="off" name="post_name" id="name" type="text" required="required" placeholder="Post Name">
-  <input autocomplete="off"	name="post_date" id=date type="date" required="required">
-  <input autocomplete="off" name="post_summary" id="summary" type="text" placeholder="post Summary">
-  <input autocomplete="off" name="post_content" id=content type=text required="required" placeholder='Post content'>
+<!--form to fill in the content of the blog post-->
+<form method=post enctype="multipart/form-data" action="{{post_url}}">
+  <input autofocus autocomplete="off" name="post_name" id="post_name" type="text" required="required" placeholder="Post Name">
+  <input autocomplete="off"	name="post_date" id=post_date type="date" required="required">
+  <input autocomplete="off" name="post_summary" id="post_summary" type="text" placeholder="post Summary">
+  <input autocomplete="off" name="post_content" id="post_content" type=text required="required" placeholder='Post content'>
   <input type="submit">
 </form>
+{% for item in post %}
+<!--for item in the post place information in the p fields for use in javascript-->
+<p id="title">{{item.title}}</p>
+<p id="date">{{item.date}}</p>
+<p id="summary">{{item.summary}}</p>
+<p id="content">{{item.content}}</p>
+{% endfor %}
 <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
 <script>
-  {% for item in post %}
-    document.getElementById("name").innerHTML = "{{item.Title}}"
-    console.log("{{item.title}}")
-  {% endfor %}
+  //pull the post information from flask and place into the form fields
+  let title = document.getElementById("title")
+  let date = document.getElementById("date")
+  let summary = document.getElementById("summary")
+  let content = document.getElementById("content")
+  document.getElementById("post_name").value = title.innerHTML
+  document.getElementById("post_date").value = date.innerHTML
+  document.getElementById("post_summary").value = summary.innerHTML
+  document.getElementById("post_content").value = content.innerHTML
+  title.remove()
+  date.remove()
+  summary.remove()
+  content.remove()
 </script>
 {% endblock %}
