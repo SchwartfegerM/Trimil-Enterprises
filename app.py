@@ -2,9 +2,15 @@
 #set enviroment variables:
 #set FLASK_APP app.py
 from os import urandom
+import sqlite3 as sql
 from flask import Flask, render_template, session, redirect, request, url_for, jsonify #imports nessessary functions from flask
 from flask_session import Session
-from database_funtions import get_database_connection #import get _database_connection function from my database library
+
+def get_database_connection():
+  #create the connection to the database
+  conn = sql.connect('TrimilEnterprises.db')
+  conn.row_factory = sql.Row
+  return conn
 
 app = Flask(__name__) #initialise the flask application
 #config to set up sessions for a secure login system
@@ -13,14 +19,20 @@ app.config["SESSION_PERMANENT"] = False
 app.secret_key = urandom(24) #creates a new secret key for the session on launch
 Session(app)
 
-
 @app.route("/")
 #route for the home page
 def index():
   conn=get_database_connection()
   posts = conn.execute("SELECT * FROM BlogPosts").fetchall()
+  last_three_posts = []
+  posts.reverse()
+  for i in range(0,3):
+      try:
+          last_three_posts.append(posts[i])
+      except:
+          break
   conn.close()
-  return render_template("index.html", posts = posts)
+  return render_template("index.html", posts = last_three_posts)
 
 #routes for the front end of the blog page
 @app.route("/blog",methods=["GET","POST"])

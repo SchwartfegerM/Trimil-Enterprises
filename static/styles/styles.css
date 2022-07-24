@@ -81,17 +81,16 @@
   justify-content: center;
   max-width: 1920px;
   position:relative;
-  color: var(--blue); /*help I dont know how to do this*/
+  color: var(--blue); 
 }
 
 * {box-sizing:border-box}
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1920px;
+  max-width: 1000px;
   position: relative;
-  height: 519px;
-  
+  margin: auto;
 }
 
 /* Hide the images by default */
