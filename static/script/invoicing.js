@@ -1,4 +1,4 @@
-let hoverBlue = "rgba(30,141,184,255)"
+let hoverBlue = "rgb(58, 141, 214)"
 let table = document.getElementById("invoices");
 let heading = document.createElement("tr");
 heading.innerHTML = '<th>Invoice #</th><th>First Name</th><th>Last Name</th><th>Office Charges</th><th>Project Management</th><th>Travel Charges</th><th>Consultancy Charges</th>'

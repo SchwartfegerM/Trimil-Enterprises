@@ -5,10 +5,9 @@
 <div class="slideshow-container">
 
   <!-- Full-width images with number and caption text -->
-  
   {% for post in posts %}
   <div class="mySlides fade">
-    <img src="{{url_for('static',filename='images/grass-stock-image.jpg')}}" style="width:100%">
+    <img src="{{url_for('static',filename='images/grass-stock-image.jpg')}}" style="width:1920px">
     <div class="text">{{post.Title}}</div>
   </div>
   {% endfor %}
@@ -19,10 +18,25 @@
 </div>
 <br>
 
-<!-- The dots/circles -->
+  <!-- The circles -->
 <div style="text-align:center">
   {% for post in posts %}
   <span class="dot" onclick="currentSlide({{loop.index}})"></span>
   {% endfor %}
+</div>
+<h3>Our Mission</h3>
+<p>Our mission is to understand the unique need of every client and offer the personal touch to help clients achieve thier business objectives by offering Project Management services and expertise within PMS to enable clients/businesses to achieve their identified business goals</p>
+<div id="review-conatiner">
+  <h3>Reviews from past clients</h3>
+  <div class="mySlides fade">
+    {% for review in reviews %}
+    <p id="review">{{review.Content}}</p>
+    <p id="name">{{review.First_Name}} {{review.Last_Name}}</p>
+    <p id="organisation">{{review.Organisation}}</p>
+    {% endfor %}
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </div>
 </div>
 {% endblock %}
