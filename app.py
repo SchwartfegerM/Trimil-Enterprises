@@ -162,21 +162,11 @@ def update_post(id,action):
       conn.execute("UPDATE BlogPosts SET title=?,date=?,Summary=?,content=? WHERE id=?",(post_name,post_date,post_summary,post_content,id))
     elif action == "INSERT":
       conn.execute("INSERT INTO BlogPosts(Title,Date,Summary,Content) VALUES (?,?,?,?)",(post_name,post_date,post_summary,post_content))
+    elif action == "delete":
+      conn.execute("DELETE FROM BlogPosts WHERE id=?",(id,))
     conn.commit()
     conn.close()
     return redirect(url_for("blog_posts_list"),code=307)
-  else:
-    return redirect(url_for("index"))
-
-@app.route("/blog/<int:id>/delete")
-#deletes a blog post
-def blog_post_delete(id):
-  if "username" in session:
-    conn = get_database_connection()
-    conn.execute("DELETE FROM BlogPosts WHERE id=?",(id,))
-    conn.commit()
-    conn.close()
-    return redirect("/blog/list")
   else:
     return redirect(url_for("index"))
 
