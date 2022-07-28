@@ -24,22 +24,15 @@ Session(app)
 def index():
   conn=get_database_connection()
   posts = conn.execute("SELECT * FROM BlogPosts").fetchall()
-  reviews = conn.execute("SELECT * FROM Reviews").fetchall()
   last_three_posts=[]
-  last_three_reviews=[]
   posts.reverse()
   for i in range(0,3):
       try:
           last_three_posts.append(posts[i])
       except:
           break
-  for i in range(0,3):
-    try:
-      last_three_reviews.append(reviews[i])
-    except:
-      break
   conn.close()
-  return render_template("index.html", posts = last_three_posts,reviews=last_three_reviews)
+  return render_template("index.html", posts = last_three_posts)
 
 #routes for the front end of the blog page
 @app.route("/blog",methods=["GET","POST"])
