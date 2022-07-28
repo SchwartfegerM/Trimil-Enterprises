@@ -70,8 +70,6 @@
 }
 #business-name{
   display: inline;
-  
-  
 }
 #header{
   text-align: center;
@@ -88,7 +86,7 @@
 
 /* Slideshow container */
 .slideshow-container {
-  max-width: 1000px;
+  max-width: 1920px;
   position: relative;
   margin: auto;
 }
@@ -97,7 +95,9 @@
 .mySlides {
   display: none;
 }
-
+.reviews{
+  display: none
+}
 /* Next & previous buttons */
 .prev, .next {
   cursor: pointer;
