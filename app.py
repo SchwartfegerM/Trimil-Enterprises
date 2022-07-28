@@ -132,7 +132,7 @@ def create_blog_post():
   else: 
     return redirect(url_for("index"))
 
-@app.route("/blog/<int:id>/edit")
+@app.route("/blog/<int:id>/edit", methods=["GET","POST"])
 #serves the page to edit a blog post and inputs the data from the blog post into the form
 def blog_post_edit(id):
   if "username" in session:
@@ -143,7 +143,7 @@ def blog_post_edit(id):
   else:
     return redirect(url_for("index"))
 
-@app.route("/blog/<int:id>/<string:action>",methods=["POST"])
+@app.route("/blog/<int:id>/<string:action>",methods=["GET","POST"])
 def update_post(id,action):
   if "username" in session:
     post_name=request.form.get("post_name",None)
@@ -155,7 +155,7 @@ def update_post(id,action):
       conn.execute("UPDATE BlogPosts SET title=?,date=?,Summary=?,content=? WHERE id=?",(post_name,post_date,post_summary,post_content,id))
     elif action == "INSERT":
       conn.execute("INSERT INTO BlogPosts(Title,Date,Summary,Content) VALUES (?,?,?,?)",(post_name,post_date,post_summary,post_content))
-    elif action == "delete":
+    elif action == "DELETE":
       conn.execute("DELETE FROM BlogPosts WHERE id=?",(id,))
     conn.commit()
     conn.close()
